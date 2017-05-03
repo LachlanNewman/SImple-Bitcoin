@@ -1,6 +1,7 @@
 # Simple-Bitcoin-CITS3002
 
 #clone repository 
+  #git clone -b non-ssl 
 
 #cd directory into folder Simple-Bitcoin-CITS3002
 
