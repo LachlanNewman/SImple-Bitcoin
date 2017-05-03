@@ -1,24 +1,16 @@
+import ssl
 import socket
-from jsonsocket import Client,Server
-
 
 host = 'localhost'
-port = 8888
+port = 8000
 
-mySocket = socket.socket()
-mySocket.bind((host,port))
 
-mySocket.listen(1)
-conn, addr = mySocket.accept()
-print ("Connection from: " + str(addr))
-while True:
-    data = conn.recv(1024).decode()
-    if not data:
-        break
-    print ("from connected  user: " + str(data))
+socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+ssl_socket = ssl.wrap_socket(socket,
+                    certfile='certificate.pem',
+                    keyfile = 'key.pem',
+                    cert_reqs=ssl.CERT_REQUIRED)
 
-    data = input("->")
-    print ("sending: " + str(data))
-    conn.send(data.encode())
+ssl_socket.connect((host,port))
 
-conn.close()
+print("ssl socket connected")
