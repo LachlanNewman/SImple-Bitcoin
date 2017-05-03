@@ -1,7 +1,7 @@
-# Simple-Bitcoin-CITS3002
+# Simple-Bitcoin-CITS3002 - Non ssl socket server client connection
 
-#clone repository 
-  #git clone -b non-ssl 
+
+#clone repository run :  git clone -b non-ssl https://github.com/LachlanNewman/Simple-Bitcoin-CITS3002.git
 
 #cd directory into folder Simple-Bitcoin-CITS3002
 
