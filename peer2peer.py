@@ -8,7 +8,18 @@ class p2p(object):
 
     def connectServer(self):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.socket.bind((self.host,self.port))
+        while True:
+            try:
+                self.socket.bind((self.host,self.port))
+                print('port', self.port , 'available' )
+                break
+            except socket.error as e:
+                if e.errno == 98:
+                    print("Port is already in use")
+                    self.port += 1
+                else:
+                    print(e)
+
         self.socket.listen(1)
 
     def acceptClients(self):
