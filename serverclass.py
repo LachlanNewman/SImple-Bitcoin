@@ -31,15 +31,19 @@ class Server(object):
 
     def acceptClients(self):
         #allow socket to accept connection from clients
-        self.connection, self.address = self.socket.accept()
-        #while loop keeps sockets open until clients leave
         while True:
-            data = self.connection.recv(1024).decode()
-            if not data:
-                break
-            print ("from connected  user: " + str(data))
 
-        self.connection.close()
+            self.connection, self.address = self.socket.accept()
+            #while loop keeps sockets open until clients leave
+            while True:
+                data = self.connection.recv(1024).decode()
+                if not data:
+                    print("no data")
+                    break
+                print ("from connected  user: " + str(data))
+
+            self.connection.close()
+
 
     def connectClient(self):
         print("client action")
