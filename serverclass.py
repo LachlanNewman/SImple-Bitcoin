@@ -1,5 +1,6 @@
 import socket
 import sys
+import threading
 
 class Server(object):
 
@@ -29,20 +30,38 @@ class Server(object):
 
         self.socket.listen(1)
 
+    def clientthread(conn):
+    #infinite loop so that function do not terminate and thread do not end.
+         while True:
+    #Receiving from client
+            data = conn.recv(1024) # 1024 stands for bytes of data to be received
+            print(data)
+
+
     def acceptClients(self):
+
+        def clientthread(conn):
+            #infinite loop so that function do not terminate and thread do not end.
+             while True:
+            #Receiving from client
+                data = conn.recv(1024) # 1024 stands for bytes of data to be received
+                if not !data
+                print(data)
         #allow socket to accept connection from clients
-        while True:
+
+        for i in range(5):
 
             self.connection, self.address = self.socket.accept()
-            #while loop keeps sockets open until clients leave
-            while True:
-                data = self.connection.recv(1024).decode()
-                if not data:
-                    print("no data")
-                    break
-                print ("from connected  user: " + str(data))
 
-            self.connection.close()
+            #Creating new thread. Calling clientthread function for this function and passing conn as argument.
+            client = threading.Thread(target=clientthread,args=(self.connection,)) #start new thread takes 1st argument as a function name to be run, second is the tuple of arguments to the function.
+            client.start()
+
+        self.connection.close()
+        self.socket.close
+
+
+
 
 
     def connectClient(self):

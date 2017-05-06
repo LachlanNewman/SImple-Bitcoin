@@ -1,17 +1,16 @@
 import socket
 import sys
-import time
 
 class Client(object):
 
     def connectClient(self):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.connect(('localhost',8000))
-        print("Client connected to socket")
+        print("Client connected to socket ")
 
     def sendMessage(self,message):
-        if message != 'ENDCONN':
-            self.socket.send(message.encode())
+        self.socket.send(message.encode())
+        #self.socket_2.send(message.encode())
 
 
 
