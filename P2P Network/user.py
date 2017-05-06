@@ -10,12 +10,13 @@ import os
 def clientAction(q,fileno):
     sys.stdin = os.fdopen(fileno)  #open stdin in this process
     client    = clientclass.Client()
-    print("client port in use")
-    client.connectClient()
-    message = input('->')
-    while message!='ENDCONN':
-        client.sendMessage(message)
-        message = input('->')
+    if(input()=="GETUSERS"): #command to get all users
+        #get all current ports from database
+        client.connectClient()
+        message ="CLIENT HAS CONNECTED"
+        while message!='ENDCONN':
+            client.sendMessage(message)
+            message = input('->')
 
 
 def serverAction():
@@ -23,6 +24,7 @@ def serverAction():
     server.connectServer()
     port   = server.port
     print("port in use = ", port)
+    #upload port used to client
     print("socket connected")
     server.connectClient()
     server.acceptClients()
