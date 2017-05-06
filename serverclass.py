@@ -44,9 +44,12 @@ class Server(object):
             #infinite loop so that function do not terminate and thread do not end.
              while True:
             #Receiving from client
-                data = conn.recv(1024) # 1024 stands for bytes of data to be received
-                if not !data
-                print(data)
+
+                data = conn.recv(1024).decode() # 1024 stands for bytes of data to be received
+                if not data:
+                    continue
+                else:
+                    print(data)
         #allow socket to accept connection from clients
 
         for i in range(5):
