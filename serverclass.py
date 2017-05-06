@@ -30,14 +30,6 @@ class Server(object):
 
         self.socket.listen(1)
 
-    def clientthread(conn):
-    #infinite loop so that function do not terminate and thread do not end.
-         while True:
-    #Receiving from client
-            data = conn.recv(1024) # 1024 stands for bytes of data to be received
-            print(data)
-
-
     def acceptClients(self):
 
         def clientthread(conn):
@@ -49,7 +41,7 @@ class Server(object):
                 if not data:
                     continue
                 else:
-                    print(data)
+                    print("from thread:" , threading.current_thread(), data)
         #allow socket to accept connection from clients
 
         for i in range(5):
