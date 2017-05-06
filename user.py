@@ -17,6 +17,7 @@ def clientAction(q,fileno):
         client.sendMessage(message)
         message = input('->')
 
+
 def serverAction():
     server = serverclass.Server('localhost',8000)
     server.connectServer()
@@ -31,6 +32,7 @@ fn = sys.stdin.fileno() #get original file descriptor for stdin
 client = multiprocessing.Process(target=clientAction,args=(q,fn))
 server = multiprocessing.Process(target=serverAction)
 server.start()
+time.sleep(2)
 client.start()
 client.join()
 server.join()
