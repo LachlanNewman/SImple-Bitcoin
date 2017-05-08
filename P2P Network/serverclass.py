@@ -16,9 +16,9 @@ class Server(object):
                 #test to see if the port is open
                 self.socket.bind((self.host,self.port))
                 #if port is open write port number to file csp.txt
-                csp = open('csp.txt', 'a+')
-                csp.write(str(self.port)+'\n')
-                csp.close()
+                #csp = open('csp.txt', 'a+')
+                #csp.write(str(self.port)+'\n')
+                #csp.close()
                 break
             except socket.error as e:
                 if e.errno == 98:

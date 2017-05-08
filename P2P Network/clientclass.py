@@ -4,19 +4,18 @@ import sys
 class Client(object):
 
     def connectClient(self):
-        self.socket1 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        #self.socket2 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        #self.socket3 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-        self.socket1.connect(('localhost',8000))
-        #self.socket2.connect(('localhost',8001))
-        #self.socket3.connect(('localhost',8002))
+        self.sockets = {}
+        print(self.ports)
+        for port in self.ports:
+            self.sockets['socket_'+ port] = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.sockets['socket_'+ port].connect(('localhost',int(port)))
         print("Client connected to socket ")
 
     def sendMessage(self,message):
-        self.socket1.send(message.encode())
-        #self.socket2.send(message.encode())
-        #self.socket3.send(message.encode())
+        for port in self.ports:
+            self.sockets['socket_' + port].send(message.encode())
 
-    #def getPortsUsed(self):
-        #get all ports in use from mongodb ->app.js
+    def getPortsUsed(self):
+        csp = open('csp.txt', 'r')
+        self.ports = csp.read().splitlines()
+        csp.close()
