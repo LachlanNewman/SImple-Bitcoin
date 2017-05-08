@@ -10,6 +10,8 @@ import os
 def clientAction(q,fileno):
     sys.stdin = os.fdopen(fileno)  #open stdin in this process
     client    = clientclass.Client()
+    client.getPortsUsed()
+    print(client.ports)
     if(input()=="GETUSERS"): #command to get all users
         #get all current ports from database
         client.connectClient()
