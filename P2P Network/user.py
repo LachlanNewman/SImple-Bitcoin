@@ -6,6 +6,9 @@ import time
 import sys
 import os
 
+HOST = 'localhost'
+PORT = 8000
+
 #COMMANDS
 GETUSERS = "RUN GETUSERS" #Connects user to peers in network
 ENDCONN  = "RUN ENDCONNECTION" #Ends connection with user to peers
@@ -15,13 +18,15 @@ def clientAction(q,fileno):
     sys.stdin = os.fdopen(fileno)  #open stdin in this process
     client    = clientclass.Client()
 
+    client.createUser()
+    print(client.user)
     client.getPortsUsed()
     #print(client.ports)
     if(input()==GETUSERS): #command to get all users
         #get all current ports from database
         if(client.connectClient()):
             message ="CLIENT HAS CONNECTED"
-            while message!='ENDCONN':
+            while message!= ENDCONN:
                 client.sendMessage(message)
                 message = input('->')
         else:
@@ -29,12 +34,10 @@ def clientAction(q,fileno):
 
 
 def serverAction():
-    server = serverclass.Server('localhost',8000)
+    server = serverclass.Server(HOST,PORT)
     server.connectServer()
-    port   = server.port
-    print("port in use = ", port)
+    print("port in use = ", server.port)
     #upload port used to client
-    print("socket connected")
     server.connectClient()
     server.acceptClients()
 

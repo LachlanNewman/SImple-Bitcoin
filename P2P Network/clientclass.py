@@ -1,8 +1,13 @@
 import socket
 import sys
 import ssl
+import uuid
 
 class Client(object):
+
+    def createUser(self):
+        self.user = {}
+        self.user['id'] = uuid.uuid4()
 
     def connectClient(self):
         self.sockets = {}
