@@ -1,6 +1,7 @@
 import socket
 import sys
 import threading
+import ssl
 
 class Server(object):
 
@@ -9,7 +10,7 @@ class Server(object):
         self.port = port #port for server
 
     def connectServer(self):
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.socket = socket.socket()
         #while loop keeps socket open until client disconects
         while True:
             try:
@@ -28,16 +29,16 @@ class Server(object):
                 else:
                     print(e)
 
-        self.socket.listen(1)
+        self.socket.listen(5)
 
     def acceptClients(self):
 
-        def clientthread(conn):
+        def clientthread(connstream):
             #infinite loop so that function do not terminate and thread do not end.
              while True:
             #Receiving from client
 
-                data = conn.recv(1024).decode() # 1024 stands for bytes of data to be received
+                data = connstream.read()# 1024 stands for bytes of data to be received
                 if not data:
                     continue
                 else:
@@ -47,9 +48,19 @@ class Server(object):
         for i in range(5):
 
             self.connection, self.address = self.socket.accept()
+            print("connnecetion")
+
+            try:
+                connstream = ssl.wrap_socket(self.connection,
+                                                server_side=True,
+                                                 certfile="mycert.pem",
+                                                 keyfile="mycert.pem")
+            except socket.error as e:
+                print("SERVERError[" + str(e.errno) + "]: " + e.strerror)
+                break
 
             #Creating new thread. Calling clientthread function for this function and passing conn as argument.
-            client = threading.Thread(target=clientthread,args=(self.connection,)) #start new thread takes 1st argument as a function name to be run, second is the tuple of arguments to the function.
+            client = threading.Thread(target=clientthread,args=(connstream,)) #start new thread takes 1st argument as a function name to be run, second is the tuple of arguments to the function.
             client.start()
 
         self.connection.close()
