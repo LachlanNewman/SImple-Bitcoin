@@ -1,12 +1,20 @@
-# Simple-Bitcoin-CITS3002 - Non ssl socket server client connection
+
+#run sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout mycert.pem -out mycert.pem
+#enter details when prompted
+#run python3 user.py in a seperate shell for each users
+#to connect each user to peers enter GETUSERS
 
 
-#clone repository run :  git clone -b non-ssl https://github.com/LachlanNewman/Simple-Bitcoin-CITS3002.git
+#COMMANDS
+#RUN GETUSERS => Connects user to peers in network
+#ENDCONN      => Ends connection with user to peers
 
-#cd directory into folder Simple-Bitcoin-CITS3002
 
-#run python3 server.py to run server in single shell
-
-#run python3 client.py in multiple shells to create multiple clients
-
-#Start flirtatious back and fouth chat between clients multiple clients!
+#TODO
+#all user (servers) will have to log the server there are running on into an online database
+#for now type all the ports that the different users are running on into the text file csp.txt like so
+#--------------------------
+#8000
+#8001
+#8002
+#--------------------------
