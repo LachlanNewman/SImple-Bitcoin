@@ -1,5 +1,6 @@
 
 #run sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout mycert.pem -out mycert.pem
+
 #enter details when prompted
 #run python3 user.py in a seperate shell for each users
 #to connect each user to peers enter GETUSERS
