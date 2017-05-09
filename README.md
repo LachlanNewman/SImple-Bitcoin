@@ -8,9 +8,9 @@ run
 ```
 sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout mycert.pem -out mycert.pem
 ```
-#enter details when prompted
+enter details when prompted
 
-#run in a seperate shell for each users
+run in a seperate shell for each users
 ```
 python3 user.py
 ```
@@ -20,9 +20,9 @@ python3 user.py
 
 ### COMMANDS
 
-#RUN GETUSERS => Connects user to peers in network
+RUN GETUSERS => Connects user to peers in network
 
-#ENDCONN      => Ends connection with user to peers
+ENDCONN      => Ends connection with user to peers
 
 
 ### TODO
