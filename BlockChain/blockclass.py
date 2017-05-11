@@ -32,15 +32,14 @@ class block(trans):
 
     #block details
     def createblock(self):
-
         #count the height of blockchain
         counth = open('blockchain.txt','r')
         nlines = len(counth.readlines())
         height= int((nlines // 2) + 1)
         
-        #info of a block
+        #info of a new block
         blockinfo = [height, self.blockid, self.previd, self.nonce]
-        #detail of a block including block info and transaction info
+        #detail of a new block including block info and transaction info
         blockdetail = [blockinfo, self.detail]
         return blockdetail
 
