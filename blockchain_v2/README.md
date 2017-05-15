@@ -1,5 +1,5 @@
 ### blockclass_v2 test instruction</br>
-blockclass_v2 store block in in .db file instead of .txt
+blockclass_v2 stores block in .db file instead of .txt
 ```
 blockclass_v2.firstblock() 
 ```
