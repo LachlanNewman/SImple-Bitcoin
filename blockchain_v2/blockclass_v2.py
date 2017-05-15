@@ -95,3 +95,6 @@ class block(trans):
         gb.close()
         print(block_info)
 
+#to do
+#initialise 1st block with {height: 1, prev hash: 0*256, transaction: {}, hash: issac_func}
+#transform block dict into json format
