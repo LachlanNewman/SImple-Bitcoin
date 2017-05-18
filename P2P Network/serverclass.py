@@ -2,33 +2,29 @@ import socket
 import sys
 import threading
 import ssl
+import uuid
+from subprocess import call
 
 class Server(object):
 
     def __init__(self, host, port):
         self.host = host #host name
         self.port = port #port for server
+        self.id   = uuid.uuid4()
 
     def connectServer(self):
         self.socket = socket.socket()
-        #while loop keeps socket open until client disconects
-        while True:
+        while True:#while loop keeps socket open until client disconects
             try:
                 #test to see if the port is open
                 self.socket.bind((self.host,self.port))
-                #if port is open write port number to file csp.txt
-                #csp = open('csp.txt', 'a+')
-                #csp.write(str(self.port)+'\n')
-                #csp.close()
                 break
             except socket.error as e:
                 if e.errno == 98:
                     print("Port is already in use")
-                    #add 1 to try another port and see if it is open
-                    self.port += 1
+                    self.port += 1#add 1 to try another port and see if it is open
                 else:
                     print(e)
-
         self.socket.listen(5)
 
     def acceptClients(self):
@@ -36,13 +32,14 @@ class Server(object):
         def clientthread(connstream):
             #infinite loop so that function do not terminate and thread do not end.
              while True:
-            #Receiving from client
-
                 data = connstream.read()# 1024 stands for bytes of data to be received
                 if not data:
                     continue
                 else:
-                    print("from thread:" , threading.current_thread(), data)
+                    if '-----BEGIN PUBLIC KEY-----' in str(data):
+                        print('pubic key = ' + data.decode())
+                    else:
+                        print("from thread:" , threading.current_thread(), data)
         #allow socket to accept connection from clients
 
         for i in range(5):
@@ -66,9 +63,15 @@ class Server(object):
         self.connection.close()
         self.socket.close
 
+    def genRSAKeyPairs(self,user):
+        #Use OpenSSL to generate given bit modulus RSA keys NOT using Triple Data Encryption (-des3)
+        call(["openssl", "genrsa", "-out", "private" + user['id'] + ".pem", "2048"])
 
+        #Write public key out to new file named publicX.pem
+        call(["openssl", "rsa", "-in", "private" + user['id'] + ".pem", "-outform", "PEM", "-pubout", "-out", "public" + user['id'] + ".pem"])
 
+    def getUser(self,user):
 
-
-    def connectClient(self):
+        user['port'] = str(self.port)
+        user['id']   = str(self.id)
         print("client action")
