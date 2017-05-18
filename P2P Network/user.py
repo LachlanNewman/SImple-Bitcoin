@@ -23,7 +23,6 @@ ENDCONN  = "RUN ENDCONNECTION" #Ends connection with user to peers
 #Client process
 #-------------------------------------------------------------------------------
 def clientAction(user,fileno):
-    print(user)
 
     sys.stdin = os.fdopen(fileno)    #open stdin in this process
     client    = clientclass.Client() #create empty Client
@@ -47,21 +46,22 @@ def clientAction(user,fileno):
 
 #Server Process
 #-------------------------------------------------------------------------------
-def serverAction(q,user):
+def serverAction(user,users):
     server = serverclass.Server(HOST,PORT) #create Server running on loalhost and port TODO maker server run over internet
     server.connectServer()                 #connect the Server
     print("port in use = ", server.port)
     #TODO upload port used with client
     server.getUser(user)
     server.genRSAKeyPairs(user)
-    server.acceptClients()                 #server begins to accept users to connect
+    server.acceptClients(user)                 #server begins to accept users to connect
 #-------------------------------------------------------------------------------
 
 if __name__ == '__main__':
     user = multiprocessing.Manager().dict()
+    users = multiprocessing.Manager().dict()
     fn = sys.stdin.fileno()                                             #get original file descriptor for stdin
     client = multiprocessing.Process(target=clientAction,args=(user,fn))   #client process
-    server = multiprocessing.Process(target=serverAction, args=(0,user))               #server process
+    server = multiprocessing.Process(target=serverAction, args=(user,users))               #server process
     server.start()
     #print(user['user'])                                                      #start server process
     time.sleep(2)                                                       #timer used to make sure output in correct

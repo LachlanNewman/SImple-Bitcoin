@@ -4,7 +4,7 @@ import threading
 import ssl
 import uuid
 from subprocess import call
-
+import pprint
 class Server(object):
 
     def __init__(self, host, port):
@@ -27,7 +27,13 @@ class Server(object):
                     print(e)
         self.socket.listen(5)
 
-    def acceptClients(self):
+    def acceptClients(self,users):
+        pp = pprint.PrettyPrinter(indent=4)
+
+        def addToUsers(data):
+            data = data.split(":")
+            users[data[0]] = data[1]
+            pp.pprint(users)
 
         def clientthread(connstream):
             #infinite loop so that function do not terminate and thread do not end.
@@ -37,7 +43,7 @@ class Server(object):
                     continue
                 else:
                     if '-----BEGIN PUBLIC KEY-----' in str(data):
-                        print('pubic key = ' + data.decode())
+                        addToUsers(data.decode())
                     else:
                         print("from thread:" , threading.current_thread(), data)
         #allow socket to accept connection from clients

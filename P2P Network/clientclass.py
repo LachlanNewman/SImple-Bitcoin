@@ -28,14 +28,15 @@ class Client(object):
             #if(line != "-----BEGIN PUBLIC KEY-----\n" and line != "-----END PUBLIC KEY-----\n"):
             public = public + line
         public_file.close()
+
         #print(public)
         for port in self.ports:
-            self.sslsockets['ssl_socket' + port].write(public.encode())
+            self.sslsockets['ssl_socket' + port].write((self.user['id'] +":" +public).encode())
 
 
     def sendMessage(self,message):
         for port in self.ports:
-            self.sslsockets['ssl_socket' + port].write(message.encode())
+            self.sslsockets['ssl_socket' + port].write((self.user['id'] + ":" +message).encode())
 
     def getPortsUsed(self):
         csp = open('csp.txt', 'r')
