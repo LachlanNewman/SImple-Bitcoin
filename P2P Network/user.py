@@ -6,7 +6,7 @@ import time
 import sys
 import os
 
-HOST = 'localhost'
+HOST = '127.0.0.1'
 PORT = 8000
 
 #COMMANDS
