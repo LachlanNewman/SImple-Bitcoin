@@ -55,7 +55,7 @@ class block:
         blockchain = shelve.open('blockchain')
         height = len(blockchain) + 1
 
-        #get the id of previous block
+        #get the hash of previous block
         prev_hash = blockchain[str(height - 1)]['hash']
         blockchain.close()
 
