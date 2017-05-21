@@ -6,7 +6,7 @@ import json
 
 #initialise first block
 def firstblock():
-    #initial amount of coins in a account
+    #initial amount of coins in an account
     firstaccount = input('initial account: ')
     firstamount = input('initial coins in first block: ')
     
