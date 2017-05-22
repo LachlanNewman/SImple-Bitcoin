@@ -5,12 +5,16 @@ import ssl
 import uuid
 from subprocess import call
 import pprint
+import walletclass
+import json
+
 class Server(object):
 
     def __init__(self, host, port):
         self.host = host #host name
         self.port = port #port for server
         self.id   = uuid.uuid4()
+        self.wallet = walletclass.Wallet()
 
     def connectServer(self):
         self.socket = socket.socket()
@@ -31,40 +35,25 @@ class Server(object):
         pp = pprint.PrettyPrinter(indent=4)
 
         def addToUsers(data):
-            data = data.split(":")
-            users[data[0]] = data[1]
-            pp.pprint(users)
+            print("data\n")
+            print(data['id'])
+            #users['id'] = data[1]
+            #print("users\n\n")
+            #print(users) #TODO add public and port to users - keys
+            #print("endkssognsin\n")
+            self.wallet.intial_transactions(data['id'])
 
-        def clientthread(connstream):
-            #infinite loop so that function do not terminate and thread do not end.
-             while True:
-                data = connstream.read()# 1024 stands for bytes of data to be received
-                if not data:
-                    continue
-                else:
-                    if '-----BEGIN PUBLIC KEY-----' in str(data):
-                        addToUsers(data.decode())
-                    else:
-                        print("from thread:" , threading.current_thread(), data)
-        #allow socket to accept connection from clients
-
-        for i in range(5):
-
-            self.connection, self.address = self.socket.accept()
-            print("connnecetion")
-
-            try:
-                connstream = ssl.wrap_socket(self.connection,
-                                                server_side=True,
-                                                 certfile="mycert.pem",
-                                                 keyfile="mycert.pem")
-            except socket.error as e:
-                print("SERVERError[" + str(e.errno) + "]: " + e.strerror)
-                break
-
-            #Creating new thread. Calling clientthread function for this function and passing conn as argument.
-            client = threading.Thread(target=clientthread,args=(connstream,)) #start new thread takes 1st argument as a function name to be run, second is the tuple of arguments to the function.
-            client.start()
+        self.connection, self.address = self.socket.accept()
+        print("connnecetion")
+        while True:
+            data = self.connection.recv(1024).decode()
+            if not data:
+                break;
+            print("from user " + str(data))
+            if '-----BEGIN PUBLIC KEY-----' in str(data):
+                addToUsers(json.loads(data))
+            else:
+                print("from thread:" , threading.current_thread(), data)
 
         self.connection.close()
         self.socket.close
@@ -80,4 +69,3 @@ class Server(object):
 
         user['port'] = str(self.port)
         user['id']   = str(self.id)
-        print("client action")
