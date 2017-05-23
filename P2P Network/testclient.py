@@ -1,5 +1,11 @@
 import socket, ssl, pprint, uuid, subprocess, json
 
+#TODO make headers in messages to differentiate between
+#       -publickeys
+#       -transactions
+#       -mining signalsfor conn in clientConnections:   
+#       others??
+
 #------------------------------------------------------------------------------------------------------------------------------------------
 #sends all transactions to server TODO EXPLAIN MORE
 #------------------------------------------------------------------------------------------------------------------------------------------
