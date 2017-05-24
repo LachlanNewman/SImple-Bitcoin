@@ -3,7 +3,7 @@ import socket, ssl, pprint, uuid, subprocess, json
 #TODO make headers in messages to differentiate between
 #       -publickeys
 #       -transactions
-#       -mining signalsfor conn in clientConnections:   
+#       -mining signalsfor conn in clientConnections:
 #       others??
 
 #------------------------------------------------------------------------------------------------------------------------------------------
@@ -16,7 +16,7 @@ def sendTransaction(ssl_sock,userid):
         dest        = input("id:"       )       #user id of reciever
         amount      = input("amount:"   )       #amount to transfer
         comment     = input("comment:"  )       #comment to go with transaction
-        if src == "X" and dest =="X" and amount = "X":          #condition to end socket connection TODO add to readme file
+        if src == "X" and dest =="X" and amount == "X":          #condition to end socket connection TODO add to readme file
             break;
         ssl_sock.write(message.encode())        #send transaction to server
 
@@ -89,11 +89,12 @@ if __name__ == '__main__':
     genRSAKeyPairs(userid)               #generate a public and private key for user
     publickey = getPublicKey(userid)     #get the publickey of the user from the file publickey<userid>.pem
 
+    publickeyinfo              = {}
+    publickeyinfo['id']        = userid
+    publickeyinfo['publickey'] = publickey
+    publickeyinfo['header']    = 'publickey'
 
-    userinfo['id']        = userid
-    userinfo['publickey'] = publickey
-
-    ssl_sock.write (json.dumps(userinfo).encode()) #send the publickey and the user id to the server
+    ssl_sock.write (json.dumps(publickeyinfo).encode()) #send the publickey and the user id to the server
     getPublicKeys  (ssl_sock  ,networkSize)       #get the public keys from all users in the network
     sendTransaction(ssl_sock  ,userid     )       #send a transation to another user
 
