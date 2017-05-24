@@ -8,23 +8,6 @@ clientConnections = []   #list of connection detials for each client to server
 clientPublicKeys  = []   #list of the publickeys for each client
 networkSize       = 0    #initailse the number of users in the network
 
-if __name__ == '__main__':
-    while True:
-        newsocket, fromaddr = socket.accept() #initialise servers socket
-        #ensure that all client who connect recieve ssl certificate
-        connstream = ssl.wrap_socket(newsocket, server_side=True,
-                                     certfile="mycert.pem",
-                                     keyfile="mycert.pem")
-
-        networkSize = networkSize + 1                   #number of users in the network increases by ! for each connection
-        clientConnections.append(connstream)            #append the details of the connection to the connection list
-        client = threading.Thread(target=clientthread,  #start new thread takes 1st argument as a function name to be run, second is the tuple of arguments to the function.
-                        args=(connstream,networkSize))
-        client.start()                                  #start thread for client
-
-        if(networkSize == num_clients):                 #if the network size reaches maximum TODO make input for runtime of maximum network size
-            time.sleep(3)                               #ensures final public key is added to publickeys list
-            sendPublicKeys(clientConnections)           #send the public keys to all clients
 
 
 #------------------------------------------------------------------------------------------------------------------------------------------
@@ -56,3 +39,21 @@ def clientthread(connstream,networkSize):
             print("transaction recieved")
         else:
             print("not a recognised heaeder message ignored")
+
+if __name__ == '__main__':
+    while True:
+        newsocket, fromaddr = socket.accept() #initialise servers socket
+        #ensure that all client who connect recieve ssl certificate
+        connstream = ssl.wrap_socket(newsocket, server_side=True,
+                                     certfile="mycert.pem",
+                                     keyfile="mycert.pem")
+
+        networkSize = networkSize + 1                   #number of users in the network increases by ! for each connection
+        clientConnections.append(connstream)            #append the details of the connection to the connection list
+        client = threading.Thread(target=clientthread,  #start new thread takes 1st argument as a function name to be run, second is the tuple of arguments to the function.
+                        args=(connstream,networkSize))
+        client.start()                                  #start thread for client
+
+        if(networkSize == num_clients):                 #if the network size reaches maximum TODO make input for runtime of maximum network size
+            time.sleep(3)                               #ensures final public key is added to publickeys list
+            sendPublicKeys(clientConnections)           #send the public keys to all clients
