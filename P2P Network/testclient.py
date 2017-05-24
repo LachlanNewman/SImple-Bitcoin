@@ -12,11 +12,13 @@ import socket, ssl, pprint, uuid, subprocess, json
 def sendTransaction(ssl_sock,userid):
     while True:
         transaction = {}                        #empty transaction
-        src         = userid                    #auto userid of sender
-        dest        = input("id:"       )       #user id of reciever
-        amount      = input("amount:"   )       #amount to transfer
-        comment     = input("comment:"  )       #comment to go with transaction
-        if dest =="X" and amount == "X" and comment == 'X':          #condition to end socket connection TODO add to readme file
+        transaction['header']     = "transaction"
+        transaction['src']        = userid                    #auto userid of sender
+        transaction['dest]        = input("id:"       )       #user id of reciever
+        transaction['amount'      = input("amount:"   )       #amount to transfer
+        transaction['comment]     = input("comment:"  )       #comment to go with transaction
+        if transaction['dest'] =="X" and transaction['amount'] == "X" and transaction['comment'] == 'X':
+            #condition to end socket connection TODO add to readme file
             break;
         ssl_sock.write(json.dumps(transaction).encode())        #send transaction to server
 
