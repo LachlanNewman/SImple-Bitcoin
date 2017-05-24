@@ -16,9 +16,9 @@ def sendTransaction(ssl_sock,userid):
         dest        = input("id:"       )       #user id of reciever
         amount      = input("amount:"   )       #amount to transfer
         comment     = input("comment:"  )       #comment to go with transaction
-        if src == "X" and dest =="X" and amount == "X":          #condition to end socket connection TODO add to readme file
+        if dest =="X" and amount == "X" and comment == 'X':          #condition to end socket connection TODO add to readme file
             break;
-        ssl_sock.write(message.encode())        #send transaction to server
+        ssl_sock.write(json.dumps(transaction).encode())        #send transaction to server
 
 #------------------------------------------------------------------------------------------------------------------------------------------
 #get all the publickeys of users in the network #TODO explain
