@@ -1,28 +1,11 @@
-### blockclass_v2 test instruction</br>
-blockclass_v2 stores block in .db file instead of .txt
-```
-blockclass_v2.firstblock() 
-```
-will create a .db file with the info of first block, you'll need to type in the amount of coins and the account who receive it</br></br>
+# blockclass_v4 test</br>
 
+### initialise first block
 ```
-t = blockclass_v2.trans(int(amountofcoin),'coin from','coin to')
-ti = t.createtrans()
+blockchain_v4.firstblock()
 ```
-will create a transaction dict with transaction detail</br></br>
 
+### add new block to blockchain
 ```
-b=blockclass_v2.block('block id','nonce',ti)
-bi = b.createblock()
+blockchain_v4.newblock()
 ```
-create a block dict with block detail</br></br>
-
-```
-b.addblock()
-```
-add/store the block in blockchain.db</br></br>
-
-```
-b.getblockinfo()
-```
-get info of a block by specifying the height
