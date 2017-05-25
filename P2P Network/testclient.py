@@ -1,4 +1,5 @@
-import socket, ssl, pprint, uuid, subprocess, json
+import socket, ssl, pprint, uuid, subprocess, json, threading
+from crypto import *
 
 #TODO make headers in messages to differentiate between
 #       -publickeys
@@ -6,33 +7,41 @@ import socket, ssl, pprint, uuid, subprocess, json
 #       -mining signalsfor conn in clientConnections:
 #       others??
 
+def recvTransaction(ssl_sock, userid,publickeys):
+    print("\t\t\t\t\t\t\t transaction recieved")
+    while True:
+        data = json.loads(ssl_sock.recv(4096).decode())
+        if not data:
+            break
+        #buildTransactionDict(data['src'],data['dest'],data['amount'],publickeys)
+        print(data)
+
 #------------------------------------------------------------------------------------------------------------------------------------------
 #sends all transactions to server TODO EXPLAIN MORE
 #------------------------------------------------------------------------------------------------------------------------------------------
-def sendTransaction(ssl_sock,userid):
+def sendTransaction(ssl_sock,userid,publickeys):
     while True:
-        transaction = {}                        #empty transaction
-        transaction['header']     = "transaction"
-        transaction['src']        = userid                    #auto userid of sender
-        transaction['dest]        = input("id:"       )       #user id of reciever
-        transaction['amount'      = input("amount:"   )       #amount to transfer
-        transaction['comment]     = input("comment:"  )       #comment to go with transaction
-        if transaction['dest'] =="X" and transaction['amount'] == "X" and transaction['comment'] == 'X':
+        print(userid + " make a transaction")
+        dest       = input("id:"       )       #user id of reciever
+        amount     = input("amount:"   )       #amount to transfer
+        #comment']    = input("comment:"  )       #comment to go with transaction
+        if dest =="X" and amount == "X":
             #condition to end socket connection TODO add to readme file
             break;
-        ssl_sock.write(json.dumps(transaction).encode())        #send transaction to server
+        transaction = buildTransactionDict(userid,dest,amount,publickeys)
+        ssl_sock.send(json.dumps(transaction).encode())        #send transaction to server
 
 #------------------------------------------------------------------------------------------------------------------------------------------
 #get all the publickeys of users in the network #TODO explain
 #------------------------------------------------------------------------------------------------------------------------------------------
-def getPublicKeys(ssl_sock,networkSize):
+def getPublicKeys(ssl_sock,networkSize,pbkeys):
     while networkSize != 0 :
-        publickeys = ssl_sock.recv(1024)    #recieve public key of user from server
+        publickeys = json.loads(ssl_sock.recv(1024).decode())    #recieve public key of user from server
         if not publickeys:
             print("waiting for public keys")
             continue
         else:
-            #print(publickeys.decode())     #debug
+            pbkeys[publickeys['id']] = publickeys['publickey']
             networkSize = networkSize -1    #if the network size counter reaches zero all of the pubic keys have been recieved
 #------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------
@@ -67,14 +76,14 @@ def genRSAKeyPairs(user):
 
 def createSSLSocket():
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
+        port = input("enter port number")
         # Require a certificate from the server. We used a self-signed certificate
         # so here ca_certs must be the server certificate itself.
         ssl_sock = ssl.wrap_socket(s,
                                    ca_certs="mycert.pem",
                                    cert_reqs=ssl.CERT_REQUIRED)
 
-        ssl_sock.connect(('localhost', 10000))
+        ssl_sock.connect(('localhost', int(port)))
         return ssl_sock
 #------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------
@@ -95,10 +104,18 @@ if __name__ == '__main__':
     publickeyinfo['id']        = userid
     publickeyinfo['publickey'] = publickey
     publickeyinfo['header']    = 'publickey'
+    publickeys = {}
 
     ssl_sock.write (json.dumps(publickeyinfo).encode()) #send the publickey and the user id to the server
-    getPublicKeys  (ssl_sock  ,networkSize)       #get the public keys from all users in the network
-    sendTransaction(ssl_sock  ,userid     )       #send a transation to another user
+    getPublicKeys  (ssl_sock  ,networkSize, publickeys)       #get the public keys from all users in the network
+    print(publickeys)
+    with open("publickeys.json","w") as fp:
+        json.dump(publickeys, fp, indent=4)
+    fp.close()
+    sendTransaction = threading.Thread(target=sendTransaction, args=(ssl_sock,userid,publickeys))       #send a transation to another user
+    recvTransaction = threading.Thread(target=recvTransaction, args=(ssl_sock,userid,publickeys))       #send a transation to another user
+    sendTransaction.start()
+    recvTransaction.start()
 
 #------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------

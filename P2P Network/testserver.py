@@ -1,13 +1,26 @@
 import socket, ssl, threading, json, time
+#Get a port number from command line
+port = -1
+socket = socket.socket()
+while(port == -1 or not port.isdigit()):
+    port = input("Enter a valid, unregistered port number:\n")
 
-socket = socket.socket() #create socket
-socket.bind(('', 10000)) #bind socket to port and host TODO make over network and check if port is open
+    #bind socket to port and host
+
+while(socket.bind( ('', int(port)) ) == -1):
+        port = input("Error binding socket to port, please try another port number:")
+
 socket.listen(5)         #listen to a que of connections
 num_clients = 2          #TODO amke num of user input from command line
 clientConnections = []   #list of connection detials for each client to server
 clientPublicKeys  = []   #list of the publickeys for each client
 networkSize       = 0    #initailse the number of users in the network
 
+
+
+def transactionRecieved(transaction):
+    for conn in clientConnections:
+        conn.send((json.dumps(transaction).encode()))
 
 
 #------------------------------------------------------------------------------------------------------------------------------------------
@@ -29,18 +42,19 @@ def clientthread(connstream,networkSize):
     #infinite loop so that function do not terminate and thread do not end.
     print(networkSize)
     while True:
-        data = connstream.read().decode()       # 1024 stands for bytes of data to be received
+        data = connstream.recv(4096).decode()       # 1024 stands for bytes of data to be received
         if not data:
             break
         data = json.loads(data)
         if data['header'] == "publickey":
             clientPublicKeys.append(data)   #append the public key to the list of public keys TODO condition to check if pubic keys or transaction
         elif data['header'] == "transaction":
-            print("transaction recieved")
+            transactionRecieved(data)
         else:
             print("not a recognised heaeder message ignored")
 
 if __name__ == '__main__':
+
     while True:
         newsocket, fromaddr = socket.accept() #initialise servers socket
         #ensure that all client who connect recieve ssl certificate
