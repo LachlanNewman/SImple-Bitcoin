@@ -15,6 +15,7 @@ num_clients = 2          #TODO amke num of user input from command line
 clientConnections = []   #list of connection detials for each client to server
 clientPublicKeys  = []   #list of the publickeys for each client
 networkSize       = 0    #initailse the number of users in the network
+target            = 2**256
 
 
 

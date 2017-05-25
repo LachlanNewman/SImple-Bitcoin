@@ -7,14 +7,18 @@ from crypto import *
 #       -mining signalsfor conn in clientConnections:
 #       others??
 
+target = 2**256
+
 def recvTransaction(ssl_sock, userid,publickeys):
     print("\t\t\t\t\t\t\t transaction recieved")
     while True:
         data = json.loads(ssl_sock.recv(4096).decode())
         if not data:
             break
-        #buildTransactionDict(data['src'],data['dest'],data['amount'],publickeys)
-        print(data)
+        #data = verifyTransactionDict(data) TODO issac  needs to fix verification
+        #print(data)
+        count, time, nonce, digest = proofOfWork(data,target)
+        print("time: " + str(time) + ", nonce: " + str(nonce))
 
 #------------------------------------------------------------------------------------------------------------------------------------------
 #sends all transactions to server TODO EXPLAIN MORE
