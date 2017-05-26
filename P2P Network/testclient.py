@@ -7,7 +7,34 @@ from crypto import *
 #       -mining signalsfor conn in clientConnections:
 #       others??
 
+
 target = 2**256
+
+def mine():
+
+    def listen(queue,stop_event):
+        #listen on the socket for signal that the transaction has been mined by someone elese
+        stop_event.set()
+    def mining():
+        #perform mine form cryptogrpahy
+        #when it mines send a signal to everyone
+        stop_event.set()
+
+
+    # indicator for other threads to stop
+    stop_event = threading.Event()
+
+    listen = threading.Thread(target=listen, args=(stop_event))
+    mining = threading.Thread(target=mining, args=(stop_event))
+
+    listen.start()
+    mining.start()
+
+    # signal the rest to stop working
+    stop_event.set()
+
+
+
 
 def recvTransaction(ssl_sock, userid,publickeys):
     print("\t\t\t\t\t\t\t transaction recieved")
