@@ -1,0 +1,56 @@
+README
+
+Here is a demo I've been working on that compiles Lachlan and my own code. The blockchain and wallet
+still need to be implemented, but I think this would be best done together so as to keep the file from
+getting any more out of hand. I changed the testserver and testclient code that Lachlan made
+quite a bit, the most obvious change is the public key distributer, but this can be reimplemented for
+the purpose of creating an environment for testing if required.
+
+Begin by opening 5 terminals in the folder.
+
+Run server.py on one, wallet.py on two and miner.py on the other two using the python3 command on linux
+
+Choose a server port ~10000 and 'log in' on the other terminals
+
+in each wallet, use the n option to generate new keypairs with names A & B. This creates the files 
+publicA.pem, privateA.pem, privateB.pem and publicB.pem. In reality, each wallet user would sign on
+across different computers, but for the purpose of this demo this should be fine
+
+Being making transactions with the t option in each wallet, only the public keys should be required,
+when providing file names, don't forget to write the extension, i.e: 'publicA.pem' not 'publicA' or 'A'
+
+You'll notice that the server recieves and redistributes these transactions to all users. They are not
+useful to miners and are discarded. The wallet programs maintain a transaction list that can be 
+saved into mineable transactions with the s option. Once 7 transactions have been made, use the s
+option in either wallet and double check that a new folder filled with these transactions has
+appeared in the working directory. Close the wallet terminals.
+
+In the miner, use the l option to list the mineable transactions, note their ID, this is required for
+the m option. Use m to mine a transaction in one of the miners, you will be required to provide the
+source public key for verification and another public key that will be credited with the mine. The 
+mining process should finish almost instantly as the initial target is easy to overcome. After 3 mines
+in EITHER terminal the network target will be updated and will decrease. After enough mines this would
+tend towards 2 minutes.
+
+Complete 3 more mines. The network difficulty will increase once again.
+
+There should be one transaction left that has yet to be mined. It will mine quickly but if you're fast
+enough you should be able to observe a mine signal clash. Use the m command in each miner to mine the
+same final transaction, enter the final required field in each terminal at approiximately the same
+time and both should mine the same transaction. One will inevitably beat the other, and the loser
+will be informed that they have been beat. This was a pain to implement.
+
+Anyway that should give a pretty good idea of where we're at. The metrics for the block chain are all
+implemented its just deciding how to implement the thing itself. I had to implement my own transaction
+list in the wallet but this should work pretty well with konrad's code, just need to check for 
+requisite funds before making a transaction etc.
+
+Keep the source code safe guys, a few people from CITS3002 have been poking around for charity in the
+labs and this took ages for me to write so I'd appreciate it if it stayed within the group.
+
+Message me if there are any questions/discrepancies, I'll be in the labs 24/7 so we can go over stuff
+and finally put this damn thing together
+
+Known errors:
+    -no real way to 'reset' or save the state of the system (should be easy to do)
+    -pipe error 32. Just retry if you get this on the server side, I have no idea
