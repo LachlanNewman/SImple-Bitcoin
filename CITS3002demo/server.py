@@ -40,7 +40,7 @@ def targetRecalculator():
     #Checks against the ever increasing amount of completed mines and recalculates when necessary
     while(True):
         #So that when 'completedMines % minesBeforeRecalculation == 0' a new target isn't calculated infinitely
-        if ((completedMines % minesBeforeRecalculation == 0.0) and (completedMines != prevCompletedMines))):
+        if ((completedMines % minesBeforeRecalculation == 0.0) and (completedMines != prevCompletedMines)):
             #A new 'batch' of mines has been completed, target must be adjusted accordingly
             #If completed too quickly, ratio < 1, and target decreases making it harder to randomly
             #generate a number less than it
