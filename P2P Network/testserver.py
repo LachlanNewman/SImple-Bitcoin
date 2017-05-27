@@ -16,8 +16,20 @@ clientConnections = []   #list of connection detials for each client to server
 clientPublicKeys  = []   #list of the publickeys for each client
 networkSize       = 0    #initailse the number of users in the network
 target            = 2**256
+target_count      = 0
+target_change     = 50
+#TODO RECIEVE BLOCK functions
+#TODO reclaibrate target and send to client
+#TODO send signal to all other users to stop mining when sig is received from winning
+#TODO sever has to be able send new blocks new taget stop mining and transactions to all clients
 
-
+def mined(mine):
+    target_count = target_count + 1
+    if target_count % target_change == 0
+        #reclaibrate_target
+    for conn in clientConnections:
+        conn.send((json.dumps(mine).encode()))
+    #send new target to all other clients
 
 def transactionRecieved(transaction):
     for conn in clientConnections:
@@ -51,6 +63,8 @@ def clientthread(connstream,networkSize):
             clientPublicKeys.append(data)   #append the public key to the list of public keys TODO condition to check if pubic keys or transaction
         elif data['header'] == "transaction":
             transactionRecieved(data)
+        elif data['header'] == "mined":
+            mined()
         else:
             print("not a recognised heaeder message ignored")
 
