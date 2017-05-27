@@ -52,3 +52,25 @@ def newblock():
     blockchain.append(new_block)
     #print(blockchain)
     return blockchain
+
+'''
+def dump()
+    for b in blockchain:
+          #Save each transactions in the global list to json file in a new folder called 'transactions'. Create this folder if it doesn't already exist
+            transactionsDir = os.path.join(os.getcwd(), r'unminedTransactions')
+            if(not os.path.exists(transactionsDir)):
+                os.mkdir(transactionsDir)
+                
+            #Begin saving transactions in arbitrary order
+            ID = 0
+            for t in transactionList:
+                with open("unminedTransactions/transaction" + str(ID) + ".json", 'w') as fp:
+                    #Remove old contents
+                    fp.seek(0)
+                    fp.truncate()
+                    
+                    #And insert new
+                    json.dump(t, fp)
+                    
+                ID = ID + 1
+'''
