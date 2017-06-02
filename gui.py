@@ -2,13 +2,14 @@
 # GUI interface for CITS3002 Project 2
 from tkinter import *
 from tkinter import messagebox
-
-from crypto3002 import *
-from blockchain3002 import *
-from walletFunctions3002 import *
+# server import *
+#from crypto3002 import *
+#from blockchain3002 import *
+#from walletFunctions3002 import *
 global master
 global connect
 global userEntry
+global coinbase
 
 def initGUI():
 	global master
@@ -47,22 +48,25 @@ def connectServer():
 	connect.title("Server Connection")
 
 	def establishConnection():
+
 	#addy = addyEntry.get()
 	#IF server does not exist
 		messagebox.showerror("Server/Port error", "Server/Port does not exist")
 		addyEntry.delete(0, 'end')
 		portEntry.delete(0, 'end')
-	#Else if ip is correnct
 		clientMenu()
+	#Else if ip is correnct
 		
 
 	def clientMenu():
 
 		def sendTrans():
 			function
+
 		def checkBalance():
-			MyBalance = checkBalance(uname)
-			messagebox.showinfo("Balance", "Your Balance equals %d" % MyBalance)
+			#global coinbase
+			#userBalance = checkBalance(blockchain, uname, coinbase)
+			messagebox.showinfo("Balance", "Your Balance equals %d" % userBalance)
 
 		def checkUsersBalanceFunc():
 			TheirUserName = checkUsersBalanceLabel.get()
@@ -108,7 +112,7 @@ def connectServer():
 	addyLabel = Label(connect ,text = "Enter the Servers Local IP Address", font = "Impact 10 underline")
 	passLabel = Label(connect ,text = "Enter your private key", font = "Impact 10 underline")
 	portLabel = Label(connect, text = "Enter the Servers Port", font = "Impact 10 underline")
-	userLabel = Label(connect, text = "Enter your user ID", font = "Impact 10 underline")
+	userLabel = Label(connect, text = "Enter your local key", font = "Impact 10 underline")
 	passEntry = Entry(connect, selectborderwidth = 50)
 	addyEntry = Entry(connect, selectborderwidth = 50, width = 14) 
 	portEntry = Entry(connect, selectborderwidth = 50, width = 4)
@@ -135,7 +139,28 @@ def connectServer():
 
 def initServer():
 	server = Tk()
-	server.title("EE")
+	server.title("Server")
+	server.geometry('300x300')
+	
+	serverLabel = Label(server, text = "Input the port you want to use", font = "Impact 10 underline")
+	serverEntry = Entry(server, selectborderwidth = 50)
+
+	timeLabel = Label(server, text = "Time it takes to mine 1 transacion", font = "Impact 10 underline")
+	timeEntry = Entry(server, selectborderwidth = 50)
+
+	sucessLabel = Label(server, text =  "Batch size", font = "Impact 10 underline")
+	sucessEntry = Entry(server, selectborderwidth = 50)
+
+	serverButton = Button(server, text = "Create Server", font = "25", padx = 30, pady = 30)
+
+	serverLabel.place(y = 10, x = 60)
+	serverEntry.place(y = 35, x = 70)
+	timeLabel.place(y = 55, x = 40)
+	timeEntry.place(y = 80, x = 70)
+	sucessLabel.place(y = 105, x = 115)
+	sucessEntry.place(y = 130, x = 70)
+	serverButton.place(y = 170, x = 70)
+
 
 
 def initClient():
@@ -177,10 +202,10 @@ def initMiner():
 
 	Mmaster.geometry('300x300')
 	addyLabel = Label(Mmaster ,text = "Enter the Servers Local IP Address", font = "Impact 10 underline")
-	passLabel = Label(Mmaster ,text = "Enter your private key", font = "Impact 10 underline")
+	
 	portLabel = Label(Mmaster, text = "Enter the Servers Port", font = "Impact 10 underline")
 	userLabel = Label(Mmaster, text = "Enter your user ID", font = "Impact 10 underline")
-	passEntry = Entry(Mmaster, selectborderwidth = 50)
+	
 	addyEntry = Entry(Mmaster, selectborderwidth = 50, width = 14) 
 	portEntry = Entry(Mmaster, selectborderwidth = 50, width = 4)
 	userEntry = Entry(Mmaster, selectborderwidth = 50)
@@ -188,15 +213,14 @@ def initMiner():
 
 
 	
-	userLabel.place(y = 5, x = 90)
-	userEntry.place(y = 25, x = 70)
-	passLabel.place(y = 50, x = 80)
-	passEntry.place(y = 75, x = 70)
-	addyLabel.place(y = 100, x = 40)
-	addyEntry.place(y = 125, x = 95)
-	portLabel.place(y = 155, x = 80)
-	portEntry.place(y = 175, x = 135)
-	addyButton.place(y = 200, x = 85)
+	userLabel.place(y = 10, x = 90)
+	userEntry.place(y = 30, x = 70)
+	
+	addyLabel.place(y = 55, x = 40)
+	addyEntry.place(y = 80, x = 95)
+	portLabel.place(y = 105, x = 80)
+	portEntry.place(y = 130, x = 135)
+	addyButton.place(y = 170, x = 85)
 
 def quit():
 	global master
